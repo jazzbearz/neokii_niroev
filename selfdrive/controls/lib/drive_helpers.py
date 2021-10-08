@@ -87,14 +87,17 @@ def initialize_v_cruise(v_ego, buttonEvents, v_cruise_last):
   return int(round(clip(v_ego * CV.MS_TO_KPH, V_CRUISE_ENABLE_MIN, V_CRUISE_MAX)))
 
 
-def get_lag_adjusted_curvature(CP, v_ego, psis, curvatures, curvature_rates):
+def get_lag_adjusted_curvature(CP, v_ego, psis, curvatures, curvature_rates, clu_speed_ms):
   if len(psis) != CONTROL_N:
     psis = [0.0 for i in range(CONTROL_N)]
     curvatures = [0.0 for i in range(CONTROL_N)]
     curvature_rates = [0.0 for i in range(CONTROL_N)]
 
   # TODO this needs more thought, use .2s extra for now to estimate other delays
-  delay = ntune_common_get('steerActuatorDelay') + .2
+  speed_kph = clu_speed_ms * 2.2369363
+  speed_kph_ratio = speed_kph / 100.0 - 1.0  # 100kph in line
+  delay = ntune_common_get('steerActuatorDelay') + .2 + speed_kph_ratio * 0.1
+  # delay = ntune_common_get('steerActuatorDelay') + .2
   current_curvature = curvatures[0]
   psi = interp(delay, T_IDXS[:CONTROL_N], psis)
   desired_curvature_rate = curvature_rates[0]
