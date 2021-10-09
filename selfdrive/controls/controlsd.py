@@ -667,7 +667,11 @@ class Controls:
 
     controlsState.steerRatio = self.VM.sR
     controlsState.steerRateCost = ntune_common_get('steerRateCost')
-    controlsState.steerActuatorDelay = ntune_common_get('steerActuatorDelay')
+
+    # Displaying steerActuratorDelay on screen
+    speed_kph = controlsState.cluSpeedMs * 2.2369363
+    speed_kph_ratio = speed_kph / 100.0 - 1.0  # 100kph in line
+    controlsState.steerActuatorDelay = ntune_common_get('steerActuatorDelay') + .2 + speed_kph_ratio * 0.13
 
     controlsState.sccGasFactor = ntune_scc_get('sccGasFactor')
     controlsState.sccBrakeFactor = ntune_scc_get('sccBrakeFactor')
