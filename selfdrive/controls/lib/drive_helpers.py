@@ -94,8 +94,8 @@ def get_lag_adjusted_curvature(CP, v_ego, psis, curvatures, curvature_rates):
     curvature_rates = [0.0 for i in range(CONTROL_N)]
 
   # TODO this needs more thought, use .2s extra for now to estimate other delays
-  speed_kph_ratio = v_ego / 100.0 - 1.0  # 100kph in line
-  delay = ntune_common_get('steerActuatorDelay') + .2 + speed_kph_ratio * 0.15
+  speed_kph_ratio = v_ego * 3.6 / 100.0 - 1.0  # 100kph in line
+  delay = ntune_common_get('steerActuatorDelay') + .2 + speed_kph_ratio * .2
   # delay = ntune_common_get('steerActuatorDelay') + .2
 
   current_curvature = curvatures[0]
